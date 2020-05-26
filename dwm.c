@@ -208,7 +208,6 @@ static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigchld(int unused);
 static void spawn(const Arg *arg);
-static void switchtag(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *);
@@ -1687,81 +1686,6 @@ showhide(Client *c)
 		showhide(c->snext);
 		XMoveWindow(dpy, c->win, WIDTH(c) * -2, c->y);
 	}
-}
-void switchtag(const Arg *arg)
-{
-    unsigned int columns;
-    unsigned int new_tagset = 0;
-    unsigned int pos, i;
-    int col, row;
-    Arg new_arg;
-
-    columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
-
-    for (i = 0; i < LENGTH(tags); ++i) {
-        if (!(selmon->tagset[selmon->seltags] & 1 << i)) {
-            continue;
-        }
-        pos = i;
-        row = pos / columns;
-        col = pos % columns;
-        if (arg->ui & SWITCHTAG_UP) {     /* UP */
-            row --;
-            if (row < 0) {
-                row = tagrows - 1;
-            }
-            do {
-                pos = row * columns + col;
-                row --;
-            } while (pos >= LENGTH(tags));
-        }
-        if (arg->ui & SWITCHTAG_DOWN) {     /* DOWN */
-            row ++;
-            if (row >= tagrows) {
-                row = 0;
-            }
-            pos = row * columns + col;
-            if (pos >= LENGTH(tags)) {
-                row = 0;
-            }
-            pos = row * columns + col;
-        }
-        if (arg->ui & SWITCHTAG_LEFT) {     /* LEFT */
-            col --;
-            if (col < 0) {
-                col = columns - 1;
-            }
-            do {
-                pos = row * columns + col;
-                col --;
-            } while (pos >= LENGTH(tags));
-        }
-        if (arg->ui & SWITCHTAG_RIGHT) {     /* RIGHT */
-            col ++;
-            if (col >= columns) {
-                col = 0;
-            }
-            pos = row * columns + col;
-            if (pos >= LENGTH(tags)) {
-                col = 0;
-                pos = row * columns + col;
-            }
-        }
-        new_tagset |= 1 << pos;
-    }
-    new_arg.ui = new_tagset;
-    if (arg->ui & SWITCHTAG_TOGGLETAG) {
-        toggletag(&new_arg);
-    }
-    if (arg->ui & SWITCHTAG_TAG) {
-        tag(&new_arg);
-    }
-    if (arg->ui & SWITCHTAG_VIEW) {
-        view (&new_arg);
-    }
-    if (arg->ui & SWITCHTAG_TOGGLEVIEW) {
-        toggleview (&new_arg);
-    }
 }
 
 void
