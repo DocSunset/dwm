@@ -865,9 +865,10 @@ void drawtaggrid(Monitor *m, int *x_pos, unsigned int occ)
     XFillRectangle(dpy, drw->drawable, drw->gc, x, y, h*columns + 1, bh);
 
     /* We will draw LENGTH(tags) squares in tagraws raws. */
-	for(j = 0,  i= 0; j < tagrows; j++) {
+	for(j = 0; j < tagrows; j++) {
         x = *x_pos;
-        for (k = 0; k < columns && i < LENGTH(tags); k++, i++) {
+        for (k = 0; k < columns; k++) {
+            i = k + (columns * (tagrows - j - 1));
 		    invert = m->tagset[m->seltags] & 1 << i ? 0 : 1;
 
             /* Select active color for current square */
