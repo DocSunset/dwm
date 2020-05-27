@@ -171,7 +171,7 @@ static void detachstack(Client *c);
 static Monitor *dirtomon(int dir);
 static void drawbar(Monitor *m);
 static void drawbars(void);
-static void drawtaggrid(Monitor *m, int *x_pos, unsigned int occ);
+static void drawtaggrid(Monitor *m, int *x_pos, unsigned int occ, unsigned int urg);
 static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static void focus(Client *c);
@@ -822,7 +822,7 @@ drawbar(Monitor *m)
 		x += w;
 	}
 	if (drawtagmask & DRAWTAGGRID) {
-		drawtaggrid(m,&x,occ);
+		drawtaggrid(m,&x,occ,urg);
 	}
 	w = blw = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeNorm]);
@@ -850,10 +850,10 @@ drawbars(void)
 	for (m = mons; m; m = m->next)
 		drawbar(m);
 }
-void drawtaggrid(Monitor *m, int *x_pos, unsigned int occ)
+void drawtaggrid(Monitor *m, int *x_pos, unsigned int occ, unsigned int urg)
 {
     unsigned int x, y, h, max_x, columns;
-    int invert, i,j, k;
+    int i, j, k;
 
     h = bh / tagrows;
     x = max_x = *x_pos;
@@ -862,36 +862,31 @@ void drawtaggrid(Monitor *m, int *x_pos, unsigned int occ)
 
     /* Firstly we will fill the borders of squares */
 
-    XSetForeground(drw->dpy, drw->gc, scheme[SchemeNorm][ColBorder].pixel);
-    XFillRectangle(dpy, drw->drawable, drw->gc, x, y, h*columns + 1, bh);
+    drw_setscheme(drw, scheme[SchemeNorm]);
+    drw_rect(drw, x, y, h*columns + 1, bh, 1, 1);
 
-    /* We will draw LENGTH(tags) squares in tagraws raws. */
+    /* We will draw LENGTH(tags) squares in tagrows rows. */
 	for(j = 0; j < tagrows; j++) {
-        x = *x_pos;
-        for (k = 0; k < columns; k++) {
-            i = k + (columns * (tagrows - j - 1));
-		    invert = m->tagset[m->seltags] & 1 << i ? 0 : 1;
+		x = *x_pos;
+		for (k = 0; k < columns; k++) {
+			i = k + (columns * (tagrows - j - 1));
+			drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
+			drw_rect(drw, x+1, y+1, h-1, h-1, 1, 0);
 
-            /* Select active color for current square */
-            XSetForeground(drw->dpy, drw->gc, !invert ? scheme[SchemeSel][ColBg].pixel :
-                                scheme[SchemeNorm][ColFg].pixel);
-            XFillRectangle(dpy, drw->drawable, drw->gc, x+1, y+1, h-1, h-1);
+			if (occ & 1 << i) {
+				drw_rect(drw, x+1, y+1, h/2, h/2, 
+					m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
+					!(urg & 1 << i));
+			}
 
-            /* Mark square if tag has client */
-            if (occ & 1 << i) {
-                XSetForeground(drw->dpy, drw->gc, !invert ? scheme[SchemeSel][ColFg].pixel :
-                                scheme[SchemeNorm][ColBg].pixel);
-                XFillRectangle(dpy, drw->drawable, drw->gc, x + 1, y + 1,
-                               h / 2, h / 2);
-            }
-		    x += h;
-            if (x > max_x) {
-                max_x = x;
-            }
-        }
-        y += h;
+			x += h;
+			if (x > max_x) {
+				max_x = x;
+			}
+		}
+		y += h;
 	}
-    *x_pos = max_x + 1;
+	*x_pos = max_x + 1;
 }
 
 void
