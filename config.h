@@ -7,8 +7,8 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = 
 {
-    "monospace:size=9",
-    "Siji:style=regular:size=9"
+    "monospace:size=10",
+    "Siji:style=regular:size=10"
 };
 static const char dmenufont[]       = "monospace:size=9";
 static const char col_black[]       = "#000000";
@@ -32,7 +32,7 @@ static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 #define DRAWTAGGRID                 1 << 1
 
 static const unsigned int drawtagmask = DRAWTAGGRID; /* | DRAWCLASSICTAGS to show classic row of tags */
-static const int tagrows = 2;
+static const int tagrows = 3;
 
 static const Rule rules[] = {
 	/* xprop(1):
