@@ -1,17 +1,17 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 8;        /* border pixel of windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = 
 {
-    "monospace:size=10",
+    "Fira Mono:size=10",
     "Siji:style=regular:size=10"
 };
-static const char dmenufont[]       = "monospace:size=9";
+static const char dmenufont[]       = "monospace:size=10";
 static const char col_black[]       = "#000000";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -43,7 +43,7 @@ static const Rule rules[] = {
 	/* class         instance    title           tags mask  isfloating  isterminal  noswallow  monitor */
 	{ "Gimp",        NULL,       NULL,           0,         1,          0,           0,        -1 },
 	{ "teensy",      NULL,       NULL,           0,         1,          0,           0,        -1 },
-	{ "stalonetray", NULL,       NULL,           ~0,        1,          0,           0,        -1 },
+	{ "stalonetray", NULL,       NULL,           1<<8,      1,          0,           0,        -1 },
 	{ "st",          NULL,       NULL,           0,         0,          1,          -1,        -1 },
 	{ NULL,          NULL,       "Event Tester", 0,         1,          0,           1,        -1 }, /* xev */
     { "st-256color", NULL,       "st-noswallow", 0,         0,          0,           1,        -1 },
@@ -93,23 +93,26 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
+    { MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+    { MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} },
 };
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
-	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-	{ ClkTagBar,            0,              Button1,        view,           {0} },
-	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+	/* click                event mask        button          function        argument */
+	{ ClkLtSymbol,          0,                Button1,        setlayout,      {0} },
+	{ ClkLtSymbol,          0,                Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkWinTitle,          0,                Button2,        zoom,           {0} },
+	{ ClkStatusText,        0,                Button3,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,        0,                Button2,        spawn,          {.v = dmenucmd } },
+	{ ClkClientWin,         MODKEY,           Button1,        movemouse,      {0} },
+	{ ClkClientWin,         MODKEY|ShiftMask, Button1,        resizemouse,    {0} },
+	{ ClkClientWin,         MODKEY,           Button2,        togglefloating, {0} },
+	{ ClkTagBar,            0,                Button1,        view,           {0} },
+	{ ClkTagBar,            0,                Button3,        toggleview,     {0} },
+	{ ClkTagBar,            MODKEY,           Button1,        tag,            {0} },
+	{ ClkTagBar,            MODKEY,           Button3,        toggletag,      {0} },
 };
 
 void
