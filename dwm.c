@@ -894,11 +894,12 @@ drawbar(Monitor *m)
 	Client *c;
 
 	/* draw status first so it can be overdrawn by tags later */
-	if (m == selmon) { /* status is only drawn on selected monitor */
-		drw_setscheme(drw, scheme[SchemeNorm]);
-		tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
-		drw_text(drw, m->ww - tw, 0, tw, bh, 0, stext, 0);
-	}
+    //tw disable status text
+	//if (m == selmon) { /* status is only drawn on selected monitor */
+	//	drw_setscheme(drw, scheme[SchemeNorm]);
+	//	tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
+	//	drw_text(drw, m->ww - tw, 0, tw, bh, 0, stext, 0);
+	//}
 
 	for (c = m->clients; c; c = c->next) {
 		if (ISVISIBLE(c))
@@ -958,7 +959,7 @@ drawbar(Monitor *m)
 				w -= tw;
 			}
 		}
-		drw_setscheme(drw, scheme[SchemeNorm]);
+		drw_setscheme(drw, scheme[SchemeSel]);
 		drw_rect(drw, x, 0, w, bh, 1, 0);
 	}
 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
