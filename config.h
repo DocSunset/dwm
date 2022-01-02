@@ -1,10 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
-static const int showbar            = 1;        /* 0 means no bar */
+static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = 
 {
@@ -43,7 +43,7 @@ static const Rule rules[] = {
 	/* class         instance    title           tags mask  isfloating  isterminal  noswallow  monitor */
 	{ "Gimp",        NULL,       NULL,           0,         1,          0,           0,        -1 },
 	{ "teensy",      NULL,       NULL,           0,         1,          0,           0,        -1 },
-	{ "stalonetray", NULL,       NULL,           1<<8,      1,          0,           0,        -1 },
+	{ "stalonetray", NULL,       NULL,           0,         1,          0,           0,        -1 },
 	{ "st",          NULL,       NULL,           0,         0,          1,          -1,        -1 },
 	{ NULL,          NULL,       "Event Tester", 0,         1,          0,           1,        -1 }, /* xev */
     { "st-256color", NULL,       "st-noswallow", 0,         0,          0,           1,        -1 },
@@ -56,11 +56,11 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "\ue002",      tile },    /* first entry is default */
-    { "\ue1de",      col  },
-    { "\ue005",      grid },
-	{ "\ue135",      NULL },    /* no layout function means floating behavior */
-	{ "\ue0af",      monocle },
+	{ "",      tile },    /* first entry is default */
+    { "c",      col  },
+    { "g",      grid },
+	{ "f",      NULL },    /* no layout function means floating behavior */
+	{ "m",      monocle },
 };
 
 /* key definitions */
