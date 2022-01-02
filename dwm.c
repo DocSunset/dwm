@@ -613,7 +613,7 @@ buttonpress(XEvent *e)
 		}
 		else if(ev->x < x + blw + columns * bh / tagrows)
 			click = ClkLtSymbol;
-		else if (ev->x > selmon->ww - TEXTW(stext))
+		else if (ev->x > selmon->ww - (int)TEXTW(stext))
 			click = ClkStatusText;
 		else
 			click = ClkWinTitle;
@@ -893,6 +893,9 @@ drawbar(Monitor *m)
 	unsigned int i, occ = 0, urg = 0, n = 0;
 	Client *c;
 
+	if (!m->showbar)
+		return;
+
 	/* draw status first so it can be overdrawn by tags later */
     //tw disable status text
 	//if (m == selmon) { /* status is only drawn on selected monitor */
@@ -1096,7 +1099,7 @@ focusstack(const Arg *arg)
 {
 	Client *c = NULL, *i;
 
-	if (!selmon->sel)
+	if (!selmon->sel || (selmon->sel->isfullscreen && lockfullscreen))
 		return;
 	if (arg->i > 0) {
 		for (c = selmon->sel->next; c && !ISVISIBLE(c); c = c->next);
